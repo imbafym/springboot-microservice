@@ -26,10 +26,10 @@ public class UserController {
         return userRepository.findAll();
     }
 
-    @GetMapping // Map ONLY GET Requests
+    @RequestMapping(path = "/add/{username},{password}") // Map ONLY GET Requests
     public @ResponseBody
-    String addNewUser(@RequestParam String username
-            , @RequestParam String password) {
+    String addNewUser(@PathVariable(value="username") String username
+            , @PathVariable(value="password")  String password) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
         User newUser = new User();
@@ -38,6 +38,46 @@ public class UserController {
         userRepository.save(newUser);
         return "Saved";
     }
+
+
+     /*
+        homework
+        get user by id
+     */
+    @GetMapping(path="/get/{userId}")
+    public @ResponseBody
+    User getUserById(@PathVariable(value = "userId") Long id){
+        return  userRepository.findOne(id);
+    }
+
+
+    /*
+        homework
+        update user by id
+     */
+    @PutMapping(path="/update/{userId},{userName},{userPassword}")
+    public @ResponseBody
+    String updateUserById(@PathVariable(value = "userId") Long id,@PathVariable(value = "userName")String userName,
+                        @PathVariable(value = "userPassword")String password){
+        User user = userRepository.findOne(id);
+        user.setUsername(userName);
+        user.setPassword(password);
+        userRepository.save(user);
+        return "Saved";
+    }
+
+
+    /*
+        Homework
+        Delete User by Id
+     */
+    @DeleteMapping(path = "/delete/{userId}")
+    public User delete(@PathVariable Long id){
+        User user = userRepository.findOne(id);
+        userRepository.delete(user);
+        return user;
+    }
+
 
     @PostMapping// Map ONLY GET Requests
     public @ResponseBody
