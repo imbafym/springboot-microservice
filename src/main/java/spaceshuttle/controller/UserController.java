@@ -2,6 +2,7 @@ package spaceshuttle.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import spaceshuttle.model.ApiResponse;
 import spaceshuttle.model.User;
 import spaceshuttle.repository.UserRepository;
 
@@ -19,17 +20,17 @@ public class UserController {
         return "Greetings from Spring Boot!";
     }
 
-    @GetMapping(path = "/all")
+    @GetMapping("/all")
     public @ResponseBody
     Iterable<User> getAllUsers() {
         // This returns a JSON or XML with the users
         return userRepository.findAll();
     }
 
-    @RequestMapping(path = "/add/{username},{password}") // Map ONLY GET Requests
+    @RequestMapping("/add/{username},{password}") // Map ONLY GET Requests
     public @ResponseBody
-    String addNewUser(@PathVariable(value="username") String username
-            , @PathVariable(value="password")  String password) {
+    String addNewUser(@PathVariable("username") String username
+            , @PathVariable("password")  String password) {
         // @ResponseBody means the returned String is the response, not a view name
         // @RequestParam means it is a parameter from the GET or POST request
         User newUser = new User();
@@ -44,10 +45,10 @@ public class UserController {
         homework
         get user by id
      */
-    @GetMapping(path="/get/{userId}")
+    @GetMapping("/get/{userId}")
     public @ResponseBody
-    User getUserById(@PathVariable(value = "userId") Long id){
-        return  userRepository.findOne(id);
+    User getUserById(@PathVariable("userId") Long id){
+        return  userRepository.findById(id);
     }
 
 
@@ -55,11 +56,11 @@ public class UserController {
         homework
         update user by id
      */
-    @PutMapping(path="/update/{userId},{userName},{userPassword}")
+    @PutMapping("/update/{userId},{userName},{userPassword}")
     public @ResponseBody
-    String updateUserById(@PathVariable(value = "userId") Long id,@PathVariable(value = "userName")String userName,
-                        @PathVariable(value = "userPassword")String password){
-        User user = userRepository.findOne(id);
+    String updateUserById(@PathVariable("userId") Long id,@PathVariable("userName")String userName,
+                        @PathVariable("userPassword")String password){
+        User user = userRepository.findById(id);
         user.setUsername(userName);
         user.setPassword(password);
         userRepository.save(user);
@@ -71,11 +72,11 @@ public class UserController {
         Homework
         Delete User by Id
      */
-    @DeleteMapping(path = "/delete/{userId}")
-    public User delete(@PathVariable Long id){
-        User user = userRepository.findOne(id);
-        userRepository.delete(user);
-        return user;
+    @DeleteMapping("/delete/{userId}")
+    public ApiResponse delete(@PathVariable Long id){
+//        User user = userRepository.findByUserId(id);
+        userRepository.delete(id);
+        return new ApiResponse();
     }
 
 
