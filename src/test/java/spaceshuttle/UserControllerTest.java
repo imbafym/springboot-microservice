@@ -34,16 +34,7 @@ public class UserControllerTest {
     private MockMvc mvc;
 
 
-    @Before
-    public void setMvc(){
-        User user = new User();
-        user.setPassword("123");
-        user.setId(1L);
-        user.setUsername("Frank");
 
-
-
-    }
 
 
     @Test
@@ -53,17 +44,14 @@ public class UserControllerTest {
                 .andExpect(content().string(equalTo("Greetings from Spring Boot!")));
     }
 
+
+
     @Test
     public void testGetUserById() throws Exception{
 
-        mvc.perform(MockMvcRequestBuilders.get("/users/1").accept(MediaType.APPLICATION_JSON))
+        mvc.perform(MockMvcRequestBuilders.get("/users/3").accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json("{\n" +
-                        "    \"flag\": true,\n" +
-                        "    \"respondCode\": null,\n" +
-                        "    \"respondContent\": null,\n" +
-                        "    \"respondObject\": null\n" +
-                        "}"));
+                .andExpect(content().string(equalTo("{\"flag\":true,\"respondCode\":null,\"respondContent\":null,\"respondObject\":null}")));
     }
 
     @Test
